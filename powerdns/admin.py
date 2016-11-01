@@ -187,18 +187,20 @@ class ReadonlyAdminMixin(object):
 
 class DeleteRequestAdmin(ReadonlyAdminMixin, admin.ModelAdmin):
     model = DeleteRequest
-    fields = ['owner', 'target_id', 'content_type']
+    list_display = ['content_type', 'state', 'created']
+    fields = ['owner', 'target_id', 'content_type', 'state', 'created']
 
 
 class DomainRequestAdmin(ReadonlyAdminMixin, admin.ModelAdmin):
     model = DomainRequest
-    list_display = ['domain']
+    list_display = ['domain', 'state', 'created']
     fields = [
         'domain',
         'key',
         'last_change_json',
         'parent_domain',
         'state',
+        'created',
         'target_account',
         'target_auto_ptr',
         'target_master',
@@ -214,13 +216,15 @@ class DomainRequestAdmin(ReadonlyAdminMixin, admin.ModelAdmin):
 
 class RecordRequestAdmin(ReadonlyAdminMixin, admin.ModelAdmin):
     model = RecordRequest
-    list_display = ['target_' + field for field in RECORD_LIST_FIELDS]
+    list_display = ['target_' + field for field in RECORD_LIST_FIELDS] + \
+                   ['state', 'created']
     fields = [
         'domain',
         'key',
         'last_change_json',
         'record',
         'state',
+        'created',
         'target_auth',
         'target_content',
         'target_disabled',
@@ -241,11 +245,13 @@ class OwnerInline(admin.TabularInline):
 
 @admin.register(Service)
 class ServiceAdmin(admin.ModelAdmin):
+    list_display = ['__str__', 'is_active']
     inlines = (OwnerInline,)
 
 
 @admin.register(ServiceOwner)
 class ServiceOwnerAdmin(admin.ModelAdmin):
+    list_display = ['owner', 'ownership_type', 'service']
     raw_id_fields = ("service", 'owner')
 
 
