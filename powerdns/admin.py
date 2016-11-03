@@ -188,12 +188,15 @@ class ReadonlyAdminMixin(object):
 class DeleteRequestAdmin(ReadonlyAdminMixin, admin.ModelAdmin):
     model = DeleteRequest
     list_display = ['content_type', 'state', 'created']
+    list_filter = ('content_type', 'state',)
     fields = ['owner', 'target_id', 'content_type', 'state', 'created']
+    radio_fields = {'content_type': admin.HORIZONTAL}
 
 
 class DomainRequestAdmin(ReadonlyAdminMixin, admin.ModelAdmin):
     model = DomainRequest
     list_display = ['domain', 'state', 'created']
+    list_filter = ('state',)
     fields = [
         'domain',
         'key',
@@ -212,12 +215,14 @@ class DomainRequestAdmin(ReadonlyAdminMixin, admin.ModelAdmin):
         'target_type',
         'target_unrestricted',
     ]
+    search_fields = ('domain__name',)
 
 
 class RecordRequestAdmin(ReadonlyAdminMixin, admin.ModelAdmin):
     model = RecordRequest
     list_display = ['target_' + field for field in RECORD_LIST_FIELDS] + \
                    ['state', 'created']
+    list_filter = ('state',)
     fields = [
         'domain',
         'key',
@@ -235,6 +240,7 @@ class RecordRequestAdmin(ReadonlyAdminMixin, admin.ModelAdmin):
         'target_ttl',
         'target_type',
     ]
+    search_fields = ('domain__name', 'record__name', 'record__content')
 
 
 class OwnerInline(admin.TabularInline):
