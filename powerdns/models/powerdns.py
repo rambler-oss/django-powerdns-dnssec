@@ -378,7 +378,7 @@ class Record(
     class Meta:
         db_table = u'records'
         ordering = ('name', 'type')
-        unique_together = ('name', 'type', 'content')
+        unique_together = ('name', 'type', 'content', 'domain')
         verbose_name = _("record")
         verbose_name_plural = _("records")
 
